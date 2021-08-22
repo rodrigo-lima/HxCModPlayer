@@ -12,7 +12,7 @@
 // File : framegenerator.c
 // Contains: frame generator for the mod player
 //
-// Written by: Jean François DEL NERO
+// Written by: Jean Franï¿½ois DEL NERO
 //
 // Change History (most recent first):
 ///////////////////////////////////////////////////////////////////////////////////
@@ -409,9 +409,11 @@ uint32_t* fg_generateFrame(framegenerator * fg,tracker_buffer_state *tb,unsigned
 
 	graphprintf(fg,fg->xres - (FONT_XSIZE*12),fg->yres - (FONT_XSIZE),0x585888,0x000000,"HxCMOD v2.13");
 
-	graphprintf(fg,FONT_XSIZE*2,1,0xFFFFFF,0x000000,"%d Channels, Pos %.3d, Pattern %.3d:%.2d, %.3d BPM, Speed %.3d",tb->track_state_buf[i].number_of_tracks,tb->track_state_buf[i].cur_pattern_table_pos,tb->track_state_buf[i].cur_pattern,tb->track_state_buf[i].cur_pattern_pos,tb->track_state_buf[i].bpm,tb->track_state_buf[i].speed);
+	graphprintf(fg,FONT_XSIZE*2,1,0xFFFFFF,0x000000,"%d Channels, Pos %.3d, Pattern %.3d:%.2d, %.3d BPM, Speed %.3d",
+		tb->track_state_buf[i].number_of_tracks,tb->track_state_buf[i].cur_pattern_table_pos,tb->track_state_buf[i].cur_pattern,
+		tb->track_state_buf[i].cur_pattern_pos,tb->track_state_buf[i].bpm,tb->track_state_buf[i].speed);
 
-	graphprintf(fg,FONT_XSIZE*2,16,0xFFFFFF,0xFF000000,"%s",tb->name);
+	graphprintf(fg,FONT_XSIZE*2,16,0xFFEE00,0xFF000000,"%s",tb->name);
 
 
 	// Display the active tracks & samples
@@ -438,7 +440,7 @@ uint32_t* fg_generateFrame(framegenerator * fg,tracker_buffer_state *tb,unsigned
 	// Print instruments list
 	for(i=0;i<31;i++)
 	{
-		graphprintf(fg,FONT_XSIZE*2,16+16+i*9,0xFFFFFF,0x000000,"%.2d: %s",i,tb->instruments[i].name);
+		graphprintf(fg,FONT_XSIZE*2,16+16+i*9,0x00AAFF,0x000000,"%.2d: %s",i,tb->instruments[i].name);
 	}
 
 	// Print effect list
@@ -453,7 +455,7 @@ uint32_t* fg_generateFrame(framegenerator * fg,tracker_buffer_state *tb,unsigned
 	i=0;
 	while(exteffectlist[i])
 	{
-		graphprintf(fg,FONT_XSIZE*2 + (i%4 * 20 * FONT_XSIZE),EXT_EFFECT_Y_POS + (((i&~3)>>2)*8),0x444444,0x000000,  (char*)exteffectlist[i]);
+		graphprintf(fg,FONT_XSIZE*2 + (i%4 * 20 * FONT_XSIZE),EXT_EFFECT_Y_POS + (((i&~3)>>2)*8),0x444444,0x22222222,  (char*)exteffectlist[i]);
 		i++;
 	}
 

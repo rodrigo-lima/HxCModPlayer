@@ -27,7 +27,8 @@
 
 #include "../hxcmod.h"
 #include "../framegenerator.h"
-#include "../data_files/data_cartoon_dreams_n_fantasies_mod.h"
+// #include "../data_files/data_cartoon_dreams_n_fantasies_mod.h"
+#include "../data_files/data_axelF_MOD.h"
 #include "../packer/pack.h"
 
 #define FRAMEXRES 640
@@ -82,9 +83,9 @@ int main (int argc, char **argv)
 	hxcmod_init(&modloaded);
 	hxcmod_setcfg(&modloaded, SAMPLERATE, 0, 0);
 
-	modfile = unpack(data_cartoon_dreams_n_fantasies_mod->data,data_cartoon_dreams_n_fantasies_mod->csize ,data_cartoon_dreams_n_fantasies_mod->data, data_cartoon_dreams_n_fantasies_mod->size);
+	modfile = unpack(data_axelF_MOD->data,data_axelF_MOD->csize ,data_axelF_MOD->data, data_axelF_MOD->size);
 
-	hxcmod_load(&modloaded,(void*)modfile,data_cartoon_dreams_n_fantasies_mod->size);
+	hxcmod_load(&modloaded,(void*)modfile,data_axelF_MOD->size);
 
 	bBuffer = SDL_CreateRGBSurface( SDL_HWSURFACE, screen->w,
 					screen->h,
@@ -116,7 +117,7 @@ int main (int argc, char **argv)
 
 	if ( SDL_OpenAudio(&fmt, NULL) < 0 )
 	{
-		fprintf(stderr, "Impossible d'accéder à l'audio: %s\n", SDL_GetError());
+		fprintf(stderr, "Impossible de abrir audio: %s\n", SDL_GetError());
 	}
 	else
 	{
