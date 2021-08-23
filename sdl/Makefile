@@ -1,12 +1,12 @@
 CC=gcc
 CFLAGS=-O3
-LDFLAGS=-lc -lm -lSDL
-EXEC=hxcmodplayer 
+LDFLAGS=-lc -lm
+EXEC=hxcmodplayer
 
 all: $(EXEC)
-      
+
 hxcmodplayer: hxcmodplayer.o framegenerator.o hxcmod.o pack.o lzw.o
-	$(CC) -o $@    $^ $(LDFLAGS) 
+	$(CC) -o $@    $^ $(LDFLAGS)
 
 hxcmodplayer.o: hxcmodplayer.c
 	$(CC) -o $@ -c $< $(CFLAGS)

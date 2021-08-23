@@ -1,6 +1,6 @@
 CC=gcc
 CFLAGS=-O3
-LDFLAGS=-lc -lm -lSDL
+LDFLAGS=-lc -lm
 EXEC=bmptoh
 
 all: $(EXEC)
