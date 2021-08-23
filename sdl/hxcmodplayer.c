@@ -17,6 +17,7 @@
 #include <time.h>
 #include <sys/time.h>
 #include <unistd.h>
+#include <libgen.h>
 
 // #include <malloc.h>
 #include <stdio.h>
@@ -27,7 +28,7 @@
 
 #include "../hxcmod.h"
 #include "../framegenerator.h"
-// #include "../data_files/data_cartoon_dreams_n_fantasies_mod.h"
+#include "../data_files/data_cartoon_dreams_n_fantasies_mod.h"
 #include "../data_files/data_axelF_MOD.h"
 #include "../packer/pack.h"
 
@@ -56,6 +57,43 @@ void mixaudio(void *unused, Uint8 *stream, int len)
 	hxcmod_fillbuffer(&modloaded, (unsigned short*)stream, len / 4, &trackbuf_state1);
 }
 
+// load file /
+int loadmod(char * file)
+{
+	FILE * f;
+	int filesize = 0;
+
+	hxcmod_unload(&modloaded);
+
+	if(modfile)
+	{
+		free(modfile);
+		modfile = 0;
+	}
+
+	f = fopen(file,"rb");
+	if(f)
+	{
+		fseek(f,0,SEEK_END);
+		filesize = ftell(f);
+		fseek(f,0,SEEK_SET);
+		if(filesize && filesize < 32*1024*1024)
+		{
+			modfile = malloc(filesize);
+			if(modfile)
+			{
+				memset(modfile,0,filesize);
+				fread(modfile,filesize,1,f);
+
+				hxcmod_load(&modloaded,(void*)modfile,filesize);
+			}
+		}
+
+		fclose(f);
+	}
+
+	return filesize;
+}
 // ---------------------------------------------------------------------------------
 
 int main (int argc, char **argv)
@@ -63,29 +101,38 @@ int main (int argc, char **argv)
 	Uint32 *buffer_dat;
 	Uint32 *framebuf;
 	int i;
-	int fullscreen;
+	// int fullscreen;
 
 	int flag = SDL_SWSURFACE;
-
-	fullscreen=0;
-
-	if (fullscreen)
-	{
-		flag |= SDL_FULLSCREEN;
-	}
+	// fullscreen=0;
+	// if (fullscreen) 	{
+	// 	flag |= SDL_FULLSCREEN;
+	// }
 
 	SDL_Init( SDL_INIT_VIDEO );
-
 	screen = SDL_SetVideoMode( FRAMEXRES, FRAMEYRES, 32, flag);
-
 	fg = init_fg(FRAMEXRES,FRAMEYRES);
 
 	hxcmod_init(&modloaded);
-	hxcmod_setcfg(&modloaded, SAMPLERATE, 0, 0);
+	hxcmod_setcfg(&modloaded, SAMPLERATE, 1, 1);
 
-	modfile = unpack(data_axelF_MOD->data,data_axelF_MOD->csize ,data_axelF_MOD->data, data_axelF_MOD->size);
-
-	hxcmod_load(&modloaded,(void*)modfile,data_axelF_MOD->size);
+	int filesize = 0;
+	if (argc == 1) {
+		// datatype * mod_data = data__cartoon_dreams_n_fantasies_mod;
+		datatype * mod_data = data_axelF_MOD;
+		modfile = unpack(mod_data->data,mod_data->csize ,mod_data->data, mod_data->size);
+		filesize = mod_data->size;
+	} else {
+		char * filepath = argv[1];
+		char * name = basename(filepath);
+		printf("Loading file: [%s] -- %s", name, filepath);
+		filesize = loadmod(filepath);
+		if (!filesize) {
+			printf("could not open file");
+			return 0;
+		}
+	}
+	hxcmod_load(&modloaded,(void*)modfile,filesize);
 
 	bBuffer = SDL_CreateRGBSurface( SDL_HWSURFACE, screen->w,
 					screen->h,
