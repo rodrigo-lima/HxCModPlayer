@@ -1,6 +1,6 @@
 CC=gcc
 CFLAGS=-O3
-LDFLAGS=-lc -lm
+LDFLAGS=-lc -lm -lSDL
 EXEC=hxcmodplayer
 
 all: $(EXEC)
